@@ -2,15 +2,23 @@ package com.example.board.service;
 
 import com.example.board.mapper.ArticleMapper;
 import com.example.board.model.Article;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
 public class ArticleService {
-    MyBatisInitializer sqlsession;
-    ArticleMapper articleMapper;
+    SqlSessionFactory sqlSessionFactory;
 
-    List<Article> getAllArticle() {
-        return articleMapper.selectAllArticle();
+    public ArticleService(SqlSessionFactory sqlSessionFactory) {
+        this.sqlSessionFactory = sqlSessionFactory;
+    }
+
+    public List<Article> getAllArticle() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+            return mapper.selectAllArticle();
+        }
     }
 
 }
