@@ -1,31 +1,53 @@
 package com.example.board.controller;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.example.board.model.Article;
 import com.example.board.service.ArticleService;
+import com.example.board.service.HttpService;
+import com.example.board.service.ListService;
+import com.example.board.service.ServiceResult;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 @WebServlet(name = "ArticleController", value = "/board/list")
 public class ArticleController extends HttpServlet {
     ArticleService articleService;
-    private SqlSessionFactory sqlSessionFactory;
+    Map<String, HttpService> commandMap;
+    SqlSessionFactory sqlSessionFactory;
+    String prefix = "/WEB-INF/view/";
 
     public void init() {
         sqlSessionFactory = (SqlSessionFactory) getServletContext().getAttribute("sqlSessionFactory");
-        articleService = new ArticleService(sqlSessionFactory);
+        commandMap = new HashMap<>();
+        commandMap.put("GET:list", new ListService());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Article> articles = articleService.getAllArticle();
-        System.out.println("test" + articles.get(0).getAuthor());
+        ServiceResult service = getService(request, response);
+        if (service.getActionType().contains("dispatcher")) {
+            request.getRequestDispatcher(prefix+service.getViewPath()).forward(request,response);
+        }
         request.getRequestDispatcher("/WEB-INF/view/list.jsp").forward(request,response);
     }
 
-    public void destroy() {
+    public ServiceResult getService(HttpServletRequest request, HttpServletResponse response) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            return findTargetService(request).doService(request, response, sqlSession);
+        }
+    }
+    private HttpService findTargetService(HttpServletRequest request) {
+        String fullUri = String.valueOf(request.getRequestURI());
+        String httpMethod = request.getMethod();
+        String urlParam = fullUri.substring(fullUri.indexOf("/", 2) + 1);
+        System.out.println(httpMethod + ":" + urlParam);
+        
+        return commandMap.get(httpMethod + ":" + urlParam);
     }
 }
