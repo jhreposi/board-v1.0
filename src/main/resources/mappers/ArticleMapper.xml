@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.board.mapper.ArticleMapper">
-    <select id="selectAllArticle" resultType="Article">
-        select * from article;
+
+    <select id="selectAllArticle" resultType="Articles">
+        select c.name, a.title, a.author, a.view_count, a.post_date, a.edit_date,a.id
+            from article a join category c on a.category_id = c.id
     </select>
+
 </mapper>

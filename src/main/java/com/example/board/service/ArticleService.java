@@ -1,5 +1,6 @@
 package com.example.board.service;
 
+import com.example.board.dto.Articles;
 import com.example.board.mapper.ArticleMapper;
 import com.example.board.model.Article;
 import org.apache.ibatis.session.SqlSession;
@@ -14,7 +15,7 @@ public class ArticleService {
         this.sqlSessionFactory = sqlSessionFactory;
     }
 
-    public List<Article> getAllArticle() {
+    public List<Articles> getAllArticle() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             ArticleMapper mapper = session.getMapper(ArticleMapper.class);
             return mapper.selectAllArticle();

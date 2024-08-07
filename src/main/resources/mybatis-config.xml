@@ -9,6 +9,7 @@
     </settings>
     <typeAliases>
         <typeAlias alias="Article" type="com.example.board.model.Article" />
+        <typeAlias alias="Articles" type="com.example.board.dto.Articles" />
     </typeAliases>
     <environments default="development">
         <environment id="development">

@@ -9,6 +9,9 @@ version '1.0-SNAPSHOT'
 repositories {
   mavenCentral()
 }
+war {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 ext {
   junitVersion = '5.9.2'
@@ -26,6 +29,7 @@ dependencies {
   implementation 'org.mybatis:mybatis:3.5.13'
   implementation 'com.mysql:mysql-connector-j:8.2.0'
   implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+  implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
 
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")

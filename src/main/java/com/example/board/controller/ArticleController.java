@@ -32,7 +32,9 @@ public class ArticleController extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServiceResult service = getService(request, response);
         if (service.getActionType().contains("dispatcher")) {
-            request.getRequestDispatcher(prefix+service.getViewPath()).forward(request,response);
+            System.out.println(service.getRequest().getAttribute("articles").toString());
+            request.getRequestDispatcher(prefix+service.getViewPath())
+                    .forward(service.getRequest(),service.getResponse());
         }
         request.getRequestDispatcher("/WEB-INF/view/list.jsp").forward(request,response);
     }
