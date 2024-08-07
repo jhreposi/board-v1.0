@@ -1,7 +1,7 @@
 package com.example.board.dto;
 
 public class Articles {
-    private String name;
+    private String name; //category name
     private int id;
     private int categoryId;
     private String title;

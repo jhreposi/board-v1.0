@@ -61,4 +61,40 @@ public class Article {
     public String getEditDate() {
         return editDate;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public void setPostDate(String postDate) {
+        this.postDate = postDate;
+    }
+
+    public void setEditDate(String editDate) {
+        this.editDate = editDate;
+    }
 }

@@ -7,4 +7,14 @@
             from article a join category c on a.category_id = c.id
     </select>
 
+    <insert id="insertArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
+        insert into article (title, author, password, content)
+        values (#{title},#{author},#{password},#{content})
+    </insert>
+
+    <insert id="insertFile" parameterType="FileVo">
+        insert into file(article_id, uuid_name, original_name, dir)
+        values (#{articleId}, #{uuidName}, #{originalName}, #{dir})
+    </insert>
+
 </mapper>
