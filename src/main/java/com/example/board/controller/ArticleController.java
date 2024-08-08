@@ -28,7 +28,6 @@ public class ArticleController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("do post");
         request.setCharacterEncoding("UTF-8");
         viewLink(request, response);
     }
@@ -37,7 +36,6 @@ public class ArticleController extends HttpServlet {
         ServiceResult service = getService(request, response);
 
         if (service.getActionType().contains("dispatcher")) {
-            System.out.println("dispatcher");
             request.getRequestDispatcher(prefix+service.getViewPath())
                     .forward(service.getRequest(),service.getResponse());
         }

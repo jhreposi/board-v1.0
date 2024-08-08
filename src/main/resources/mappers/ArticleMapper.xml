@@ -29,9 +29,14 @@
         where article_id = #{articleId}
     </select>
 
-    <select id="selectFile" parameterType="int" resultType="FileVo">
+    <select id="selectFiles" parameterType="int" resultType="FileVo">
         select id, article_id, uuid_name, original_name, dir from file
         where article_id = #{articleId}
+    </select>
+
+    <select id="selectFile" parameterType="int" resultType="FileVo">
+        select id, article_id, uuid_name, original_name, dir from file
+        where id = #{fileId}
     </select>
 
 </mapper>

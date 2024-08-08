@@ -13,5 +13,7 @@ public interface ArticleMapper {
     int insertFile(FileVo fileVo);
     Articles selectArticleById(int articleId);
     List<Comment> selectComments(int articleId);
-    FileVo selectFile(int articleId);
+    FileVo selectFiles(int articleId);
+    FileVo selectFile(int fileId);
+
 }

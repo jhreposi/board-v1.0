@@ -24,7 +24,8 @@
             <div>${article.viewCount}</div>
         </div>
         <div>${article.content}</div>
-        <a href="#">${file.originalName}</a>
+        <a href="${pageContext.request.contextPath}/file/download?fileId=${file.id}">${file.originalName}</a>
+
 
         <div class="comment-container">
             <c:forEach var="comment" items="${comments}">

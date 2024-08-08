@@ -33,16 +33,18 @@ public class ViewService implements HttpService {
 //
 //        int articleIdTemp = articleForId.getId();
         int articleId = Integer.parseInt(request.getParameter("id"));
-        System.out.println("fromJSON id :" + articleId);
         ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
 
         Articles articleView = mapper.selectArticleById(articleId);
         List<Comment> articleComment = mapper.selectComments(articleId);
-        FileVo articleFile = mapper.selectFile(articleId);
+        FileVo articleFile = mapper.selectFiles(articleId);
         request.setAttribute("article", articleView);
         request.setAttribute("comments", articleComment);
         request.setAttribute("file", articleFile);
 
         return new ServiceResult("dispatcher", "articleOne.jsp",request,response);
+    }
+    public FileVo getFileById(int fileId) {
+        return sqlSession.getMapper(ArticleMapper.class).selectFile(fileId);
     }
 }
