@@ -16,20 +16,24 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class WriteService implements HttpService {
-    // TODO: 2024-08-07 sqlsession 멤버변수로
+    SqlSession sqlSession;
+    public WriteService() {
+        this.sqlSession = getSqlSession();
+    }
+
     @Override
-    public ServiceResult doService(HttpServletRequest request, HttpServletResponse response, SqlSession sqlSession) {
+    public ServiceResult doService(HttpServletRequest request, HttpServletResponse response) {
         if (request.getMethod().equals("GET")) {
             return new ServiceResult("dispatcher","write.jsp",request,response);
-        } else if (request.getMethod().equals("POST")){
+        }
+        else if (request.getMethod().equals("POST")){
             int addedArticleId = articleAdd(request, sqlSession);
-            FileVo fileVo = null;
-            // TODO: 2024-08-07 조건 메서드화하기 
-            if (request.getContentType() != null && request.getContentType().toLowerCase().startsWith("multipart/")) {
+            if (isMultipartFile(request)) {
                 try {
-                    fileVo = fileService(request);
+                    FileVo fileVo = fileService(request);
                     fileAdd(fileVo, addedArticleId, sqlSession);
                 } catch (ServletException | IOException e) {
+                    sqlSession.rollback();
                     throw new RuntimeException(e);
                 }
             }
@@ -39,14 +43,17 @@ public class WriteService implements HttpService {
     }
     int articleAdd(HttpServletRequest request, SqlSession sqlSession) {
         Article article = new Article();
+        article.setCategoryId(Integer.parseInt(request.getParameter("category")));
         article.setAuthor(request.getParameter("author"));
         article.setTitle(request.getParameter("title"));
         article.setContent(request.getParameter("content"));
         article.setPassword(request.getParameter("password"));
         int result = sqlSession.getMapper(ArticleMapper.class).insertArticle(article);
-//        if (result > 1) {
-//            sqlSession.commit();
-//        }
+        if (result > 0) {
+            sqlSession.commit();
+        } else {
+            sqlSession.rollback();
+        }
         return article.getId();
     }
     
@@ -85,9 +92,19 @@ public class WriteService implements HttpService {
         return fileVo;
     }
 
-    int fileAdd(FileVo fileVo, int articleId, SqlSession sqlSession) {
+    void fileAdd(FileVo fileVo, int articleId, SqlSession sqlSession) {
+        if (fileVo.getOriginalName() == null) {
+            return;// TODO: 2024-08-08 파일이 없을 떄 fileService도 실행 안하고 스킵하는 좋은방법은? 
+        }
         fileVo.setArticleId(articleId);
-        return sqlSession.getMapper(ArticleMapper.class).insertFile(fileVo);
+        int result = sqlSession.getMapper(ArticleMapper.class).insertFile(fileVo);
+        if (result > 0) {
+            sqlSession.commit();
+        }
+    }
+
+    Boolean isMultipartFile(HttpServletRequest request) {
+        return request.getContentType() != null && request.getContentType().toLowerCase().startsWith("multipart/");
     }
 
 }

@@ -8,8 +8,8 @@
     </select>
 
     <insert id="insertArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
-        insert into article (title, author, password, content)
-        values (#{title},#{author},#{password},#{content})
+        insert into article (category_id,title, author, password, content)
+        values (#{categoryId}, #{title}, #{author}, #{password}, #{content})
     </insert>
 
     <insert id="insertFile" parameterType="FileVo">

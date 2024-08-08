@@ -7,39 +7,32 @@ import com.example.board.service.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 @WebServlet(name = "ArticleController", value = "/board/*")
 @MultipartConfig
 public class ArticleController extends HttpServlet {
     Map<String, HttpService> commandMap;
-    SqlSessionFactory sqlSessionFactory;
     String prefix = "/WEB-INF/view/";
 
     public void init() {
-        sqlSessionFactory = (SqlSessionFactory) getServletContext().getAttribute("sqlSessionFactory");
         commandMap = new HashMap<>();
         commandMap.put("GET:list", new ListService());
+        commandMap.put("GET:view", new ViewService());
         commandMap.put("GET:write", new WriteService());
         commandMap.put("POST:write",new WriteService());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        ServiceResult service = getService(request, response);
-
-        if (service.getActionType().contains("dispatcher")) {
-            request.getRequestDispatcher(prefix+service.getViewPath())
-                    .forward(service.getRequest(),service.getResponse());
-        }
-        if (service.getActionType().contains("redirect")) {
-            response.sendRedirect(request.getContextPath() + service.getViewPath());
-        }
+        viewLink(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        viewLink(request, response);
+    }
+
+    private void viewLink(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceResult service = getService(request, response);
 
         if (service.getActionType().contains("dispatcher")) {
@@ -52,9 +45,7 @@ public class ArticleController extends HttpServlet {
     }
 
     public ServiceResult getService(HttpServletRequest request, HttpServletResponse response) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession(true)) {
-            return findTargetService(request).doService(request, response, sqlSession);
-        }
+            return findTargetService(request).doService(request, response);
     }
     private HttpService findTargetService(HttpServletRequest request) {
         String fullUri = String.valueOf(request.getRequestURI());
@@ -65,7 +56,7 @@ public class ArticleController extends HttpServlet {
         if (urlParam.equals("/")) {
             link = "default";
         }
-        
+
         return commandMap.get(link);
     }
 }

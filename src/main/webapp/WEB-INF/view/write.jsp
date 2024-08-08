@@ -16,8 +16,11 @@
         <label>
             카테고리
             <select name="category">
-                <option>java</option>
-                <option>js</option>
+                <option value="1">자유</option>
+                <option value="2">일상</option>
+                <option value="3">음악</option>
+                <option value="4">영화</option>
+                <option value="5">여행</option>
             </select>
         </label>
         <label>
@@ -45,6 +48,5 @@
     </form>
 </body>
 <script>
-    application.path
 </script>
 </html>
