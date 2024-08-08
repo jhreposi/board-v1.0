@@ -17,4 +17,21 @@
         values (#{articleId}, #{uuidName}, #{originalName}, #{dir})
     </insert>
 
+    <select id="selectArticleById" parameterType="int" resultType="Articles">
+        select
+            a.id as articleId, c.name, title, author, password, content, view_count, post_date, edit_date
+            from article a join category c on a.category_id = c.id
+        where a.id = #{id}
+    </select>
+    
+    <select id="selectComments" parameterType="int" resultType="Comment">
+        select c.id, c.article_id, c.comment, c.post_date from comment c
+        where article_id = #{articleId}
+    </select>
+
+    <select id="selectFile" parameterType="int" resultType="FileVo">
+        select id, article_id, uuid_name, original_name, dir from file
+        where article_id = #{articleId}
+    </select>
+
 </mapper>
