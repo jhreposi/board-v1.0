@@ -60,7 +60,7 @@ public class WriteService implements HttpService {
     FileVo fileService(HttpServletRequest request) throws ServletException, IOException {
         FileVo fileVo = new FileVo();
         Collection<Part> parts = request.getParts();
-        String attacheDir = "E:\\attaches";
+        String attacheDir = "E:\\attaches"; //프로퍼티화
 
         String uploadDir = attacheDir + File.separator;
         File uploadDirFile = new File(uploadDir);

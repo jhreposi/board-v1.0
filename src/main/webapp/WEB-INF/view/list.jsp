@@ -14,10 +14,34 @@
         .table {
             display: table;
         }
+        form button {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            background-color: white;
+            text-decoration: underline;
+        }
     </style>
 </head>
-<body>
-    <h2>자유게시판 - 목록</h2>
+<body style="padding: 0 10%">
+    <h2><a href="/board/list">자유게시판 - 목록</a></h2>
+    <nav>
+        <form id="searchForm" action="/board/list" method="get">
+            <input type="date" name="start">
+            <input type="date" name="end">
+            <select name="category">
+                <option value="">전체 카테고리</option>
+                <option value="1">자유</option>
+                <option value="2">일상</option>
+                <option value="3">음악</option>
+                <option value="4">영화</option>
+                <option value="5">여행</option>
+            </select>
+            <input type="text" name="keyword">
+            <button type="submit" id="searchBtn">검색</button>
+        </form>
+    </nav>
     <div class="table">
         <div style="display:table-row">
             <p style="display: table-cell">카테고리</p>
@@ -44,23 +68,13 @@
         </c:forEach>
     </div>
     <button type="button"><a href="${pageContext.request.contextPath}/board/write">등록</a></button>
+    <div style="text-align: center">
+        <c:forEach var="i" begin="1" end="${page.lastPage}">
+            <span><a href="/board/list?pageNum=${i}">${i}</a></span>
+        </c:forEach>
+    </div>
 </body>
 <script>
-    rows = document.querySelectorAll('#viewLink');
-    rows.forEach(row => {
-        row.addEventListener('click', function (){
-            const id = this.getAttribute('data-id');
-            console.log('click id ', id)
-            const data = {'id' : id}
 
-            fetch(`${pageContext.request.contextPath}/board/view`, {
-                headers : {'Content-Type' : 'application/json'},
-                method  : 'POST',
-                body : JSON.stringify(data)
-            }).then(response => {
-                console.log(response)
-            })
-        });
-    })
 </script>
 </html>

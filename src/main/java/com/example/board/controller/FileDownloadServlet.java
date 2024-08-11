@@ -3,7 +3,6 @@ package com.example.board.controller;
 import java.io.*;
 
 import com.example.board.model.FileVo;
-import com.example.board.service.ArticleService;
 import com.example.board.service.ViewService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.*;
@@ -42,6 +41,4 @@ public class FileDownloadServlet extends HttpServlet {
 
     }
 
-    public void destroy() {
-    }
 }

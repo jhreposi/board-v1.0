@@ -26,6 +26,6 @@ public class MyBatisInitializer implements ServletContextListener {
         }
     }
     static SqlSession getSession() {
-        return sqlSessionFactory.openSession();
+        return sqlSessionFactory.openSession(true);
     }
 }

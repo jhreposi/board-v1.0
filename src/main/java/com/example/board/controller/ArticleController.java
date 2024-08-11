@@ -23,6 +23,7 @@ public class ArticleController extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setCharacterEncoding("UTF-8");
         viewLink(request, response);
     }
 
